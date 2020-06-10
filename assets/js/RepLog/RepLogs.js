@@ -2,11 +2,12 @@ import React from 'react';
 import RepLogList from "./RepLogList";
 import PropTypes from 'prop-types';
 
+const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => total + log.totalWeightLifted, 0);
+
 export default function RepLogs(props) {
     let { withHeart, highlightedRowId, onRowClick, repLogs } = props
     let heart = ''
     if (withHeart) heart = <span>❤️</span>
-
 
     return (
         <div className="col-md-7">
@@ -27,7 +28,7 @@ export default function RepLogs(props) {
                 <tr>
                     <td>&nbsp;</td>
                     <th>Total</th>
-                    <th>TODO</th>
+                    <th>{ calculateTotalWeightFancier(repLogs) }</th>
                     <td>&nbsp;</td>
                 </tr>
                 </tfoot>

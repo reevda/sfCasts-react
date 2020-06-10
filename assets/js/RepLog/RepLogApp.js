@@ -25,8 +25,12 @@ export default class RepLogApp extends Component {
         const { highlightedRowId } = this.state;
         const { withHeart } = this.props;
 
-        return <RepLogs withHeart={ withHeart } highlightedRowId={ highlightedRowId } onRowClick={ this.handleClick }
-                        repLogs={ this.state.repLogs }/>
+        return <RepLogs
+            { ...this.props }
+            { ...this.state }
+            onRowClick={ this.handleClick }
+            repLogs={ this.state.repLogs }
+        />
 
     }
 }

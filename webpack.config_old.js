@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     // demandé par l'IDE
-    .configureRuntimeEnvironment('dev-server')
+    .configureRuntimeEnvironment('dev')
     // the project directory where all compiled assets will be stored
     .setOutputPath('public/build/')
 
@@ -30,10 +30,10 @@ Encore
     .enableVersioning(Encore.isProduction())
     .enableReactPreset()
     .configureBabel((babelConfig) => {
-        if(Encore.isProduction()){
-            babelConfig.plugins.push(
-                'transform-react-remove-prop-types'
-            );
+        babelConfig.env = {
+            "production": {
+                "plugins": ["transform-react-remove-prop-types"]
+            }
         }
     })
 ;
