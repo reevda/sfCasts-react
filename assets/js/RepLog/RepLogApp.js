@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import RepLogs from "./RepLogs";
 import PropTypes from "prop-types";
+import { v4 as uuid } from 'uuid';
 
 
 export default class RepLogApp extends Component {
@@ -9,29 +10,39 @@ export default class RepLogApp extends Component {
         this.state = {
             highlightedRowId: null,
             repLogs: [
-                { id: 1, reps: 25, itemLabel: 'My laptop', totalWeightLifted: 112.5 },
-                { id: 2, reps: 10, itemLabel: 'Big Fat Cat', totalWeightLifted: 180 },
-                { id: 8, reps: 4, itemLabel: 'Big Fat Cat', totalWeightLifted: 72 }
+                { id: uuid(), reps: 25, itemLabel: 'My laptop', totalWeightLifted: 112.5 },
+                { id: uuid(), reps: 10, itemLabel: 'Big Fat Cat', totalWeightLifted: 180 },
+                { id: uuid(), reps: 4, itemLabel: 'Big Fat Cat', totalWeightLifted: 72 }
             ]
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleAddRepLog = this.handleAddRepLog.bind(this);
     }
 
-    handleClick(repLogId, event) {
+    handleClick(repLogId) {
         this.setState({ highlightedRowId: repLogId })
     }
 
-    render() {
-        const { highlightedRowId } = this.state;
-        const { withHeart } = this.props;
+    handleAddRepLog(itemLabel, reps) {
+        const newRep = {
+            id: uuid(),
+            reps: reps,
+            itemLabel: itemLabel,
+            totalWeightLifted: Math.floor(Math.random() * 50)
+        };
+        this.setState(prevState => {
+            return { repLogs: [ ...prevState.repLogs, newRep ] };
+        });
+    }
 
+    render() {
         return <RepLogs
             { ...this.props }
             { ...this.state }
             onRowClick={ this.handleClick }
             repLogs={ this.state.repLogs }
+            onAddRepLog={ this.handleAddRepLog }
         />
-
     }
 }
 
