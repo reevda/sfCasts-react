@@ -19,6 +19,7 @@ export default class RepLogApp extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleAddRepLog = this.handleAddRepLog.bind(this);
         this.handleHeartChange = this.handleHeartChange.bind(this);
+        this.handleDeleteRepLog = this.handleDeleteRepLog.bind(this);
     }
 
     handleClick(repLogId) {
@@ -43,6 +44,14 @@ export default class RepLogApp extends Component {
         });
     }
 
+    handleDeleteRepLog(id) {
+        this.setState(prevState => {
+            return {
+                repLogs: prevState.repLogs.filter(repLog => repLog.id !== id)
+            }
+        })
+    }
+
     render() {
         return <RepLogs
             { ...this.props }
@@ -50,7 +59,8 @@ export default class RepLogApp extends Component {
             onRowClick={ this.handleClick }
             repLogs={ this.state.repLogs }
             onAddRepLog={ this.handleAddRepLog }
-            onHeartChange={this.handleHeartChange}
+            onHeartChange={ this.handleHeartChange }
+            onDeleteRepLog={ this.handleDeleteRepLog }
         />
     }
 }

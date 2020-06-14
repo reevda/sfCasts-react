@@ -7,7 +7,7 @@ import RepLogCreator from "./RepLogCreator";
 const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => total + log.totalWeightLifted, 0);
 
 export default function RepLogs(props) {
-    let { withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog, numberOfHearts, onHeartChange } = props
+    let { withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog, numberOfHearts, onHeartChange, onDeleteRepLog } = props
     let heart = ''
     if (withHeart) heart = <span>{ '❤️'.repeat(numberOfHearts) }</span>;
 
@@ -27,7 +27,8 @@ export default function RepLogs(props) {
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
-                <RepLogList highlightedRowId={ highlightedRowId } onRowClick={ onRowClick } repLogs={ repLogs }/>
+                <RepLogList highlightedRowId={ highlightedRowId } onRowClick={ onRowClick } repLogs={ repLogs }
+                            onDeleteRepLog={ onDeleteRepLog } />
                 <tfoot>
                 <tr>
                     <td>&nbsp;</td>
@@ -57,4 +58,5 @@ RepLogs.propTypes = {
     repLogs: PropTypes.array.isRequired,
     numberOfHearts: PropTypes.number.isRequired,
     onHeartChange: PropTypes.func.isRequired,
+    onDeleteRepLog: PropTypes.func.isRequired,
 }
