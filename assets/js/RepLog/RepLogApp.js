@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import RepLogs from "./RepLogs";
 import PropTypes from "prop-types";
 import { v4 as uuid } from 'uuid';
-
+import { getRepLogs, deleteRepLog, createRepLog } from "../api/rep_log_api";
 
 export default class RepLogApp extends Component {
     constructor(props) {
@@ -10,11 +10,8 @@ export default class RepLogApp extends Component {
         this.state = {
             numberOfHearts: 1,
             highlightedRowId: null,
-            repLogs: [
-                { id: uuid(), reps: 25, itemLabel: 'My laptop', totalWeightLifted: 112.5 },
-                { id: uuid(), reps: 10, itemLabel: 'Big Fat Cat', totalWeightLifted: 180 },
-                { id: uuid(), reps: 4, itemLabel: 'Big Fat Cat', totalWeightLifted: 72 }
-            ]
+            repLogs: [],
+            isLoaded: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleAddRepLog = this.handleAddRepLog.bind(this);
@@ -22,20 +19,32 @@ export default class RepLogApp extends Component {
         this.handleDeleteRepLog = this.handleDeleteRepLog.bind(this);
     }
 
+    componentDidMount() {
+        getRepLogs()
+            .then((data) => {
+                this.setState({
+                    repLogs: data,
+                    isLoaded: true
+                });
+            });
+    }
+
     handleClick(repLogId) {
         this.setState({ highlightedRowId: repLogId })
     }
 
-    handleAddRepLog(itemLabel, reps) {
+    handleAddRepLog(item, reps) {
         const newRep = {
-            id: uuid(),
             reps: reps,
-            itemLabel: itemLabel,
-            totalWeightLifted: Math.floor(Math.random() * 50)
+            item: item,
         };
-        this.setState(prevState => {
-            return { repLogs: [ ...prevState.repLogs, newRep ] };
-        });
+        createRepLog(newRep)
+            .then(repLog => {
+                this.setState(prevState => {
+                    const newRepLog = [ ...prevState.repLogs, repLog ];
+                    return { repLogs: newRepLog };
+                })
+            });
     }
 
     handleHeartChange(heartCount) {
@@ -45,6 +54,7 @@ export default class RepLogApp extends Component {
     }
 
     handleDeleteRepLog(id) {
+        deleteRepLog(id);
         this.setState(prevState => {
             return {
                 repLogs: prevState.repLogs.filter(repLog => repLog.id !== id)

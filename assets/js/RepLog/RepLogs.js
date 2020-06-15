@@ -7,7 +7,10 @@ import RepLogCreator from "./RepLogCreator";
 const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => total + log.totalWeightLifted, 0);
 
 export default function RepLogs(props) {
-    let { withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog, numberOfHearts, onHeartChange, onDeleteRepLog } = props
+    let {
+        withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog,
+        numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded
+    } = props
     let heart = ''
     if (withHeart) heart = <span>{ '❤️'.repeat(numberOfHearts) }</span>;
 
@@ -28,26 +31,27 @@ export default function RepLogs(props) {
                 </tr>
                 </thead>
                 <RepLogList highlightedRowId={ highlightedRowId } onRowClick={ onRowClick } repLogs={ repLogs }
-                            onDeleteRepLog={ onDeleteRepLog } />
-                <tfoot>
-                <tr>
-                    <td>&nbsp;</td>
-                    <th>Total</th>
-                    <th>{ calculateTotalWeightFancier(repLogs) }</th>
-                    <td>&nbsp;</td>
-                </tr>
-                </tfoot>
-            </table>
+                            onDeleteRepLog={ onDeleteRepLog } isLoaded={ isLoaded } />
+            <tfoot>
+            <tr>
+                <td>&nbsp;</td>
+                <th>Total</th>
+                <th>{ calculateTotalWeightFancier(repLogs) }</th>
+                <td>&nbsp;</td>
+            </tr>
+            </tfoot>
+        </table>
 
-            <div className="row">
-                <div className="col-md-6">
-                    <RepLogCreator
-                        onAddRepLog={ onAddRepLog }
-                    />
-                </div>
-            </div>
+    <div className="row">
+        <div className="col-md-6">
+            <RepLogCreator
+                onAddRepLog={ onAddRepLog }
+            />
         </div>
-    );
+    </div>
+</div>
+)
+    ;
 }
 
 RepLogs.propTypes = {
@@ -59,4 +63,5 @@ RepLogs.propTypes = {
     numberOfHearts: PropTypes.number.isRequired,
     onHeartChange: PropTypes.func.isRequired,
     onDeleteRepLog: PropTypes.func.isRequired,
+    isLoaded: PropTypes.bool.isRequired,
 }
