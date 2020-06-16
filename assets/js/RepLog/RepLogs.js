@@ -9,7 +9,7 @@ const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => to
 export default function RepLogs(props) {
     let {
         withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog,
-        numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded
+        numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded, isSavingNewRepLog, successMessage
     } = props
     let heart = ''
     if (withHeart) heart = <span>{ '❤️'.repeat(numberOfHearts) }</span>;
@@ -21,6 +21,13 @@ export default function RepLogs(props) {
                 Lift History! { heart }
             </h2>
             <input type="range" value={ numberOfHearts } onChange={ (e) => onHeartChange(+e.target.value) }/>
+
+            {successMessage && (
+                <div className="alert alert-success text-center">
+                    {successMessage}
+                </div>
+            )}
+
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -31,27 +38,28 @@ export default function RepLogs(props) {
                 </tr>
                 </thead>
                 <RepLogList highlightedRowId={ highlightedRowId } onRowClick={ onRowClick } repLogs={ repLogs }
-                            onDeleteRepLog={ onDeleteRepLog } isLoaded={ isLoaded } />
-            <tfoot>
-            <tr>
-                <td>&nbsp;</td>
-                <th>Total</th>
-                <th>{ calculateTotalWeightFancier(repLogs) }</th>
-                <td>&nbsp;</td>
-            </tr>
-            </tfoot>
-        </table>
+                            onDeleteRepLog={ onDeleteRepLog } isLoaded={ isLoaded }
+                            isSavingNewRepLog={ isSavingNewRepLog }/>
+                <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <th>Total</th>
+                    <th>{ calculateTotalWeightFancier(repLogs) }</th>
+                    <td>&nbsp;</td>
+                </tr>
+                </tfoot>
+            </table>
 
-    <div className="row">
-        <div className="col-md-6">
-            <RepLogCreator
-                onAddRepLog={ onAddRepLog }
-            />
+            <div className="row">
+                <div className="col-md-6">
+                    <RepLogCreator
+                        onAddRepLog={ onAddRepLog }
+                    />
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-)
-    ;
+    )
+        ;
 }
 
 RepLogs.propTypes = {
@@ -64,4 +72,6 @@ RepLogs.propTypes = {
     onHeartChange: PropTypes.func.isRequired,
     onDeleteRepLog: PropTypes.func.isRequired,
     isLoaded: PropTypes.bool.isRequired,
+    isSavingNewRepLog: PropTypes.bool.isRequired,
+    successMessage: PropTypes.string.isRequired
 }
