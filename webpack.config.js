@@ -35,6 +35,7 @@ Encore
                 'transform-react-remove-prop-types'
             );
         }
+        babelConfig.plugins.push('transform-object-rest-spread');
     })
 ;
 
