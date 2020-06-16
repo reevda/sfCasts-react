@@ -13,7 +13,8 @@ export default class RepLogApp extends Component {
             repLogs: [],
             isLoaded: false,
             isSavingNewRepLog: false,
-            successMessage: ''
+            successMessage: '',
+            newRepLogValidationErrorMessage: ''
         };
 
         this.successsMessageTimeoutHandler = 0;
@@ -57,9 +58,19 @@ export default class RepLogApp extends Component {
                     return {
                         repLogs: newRepLog,
                         isSavingNewRepLog: false,
+                        newRepLogValidationErrorMessage: '',
                     };
                 })
                 this.setSuccessMessage('Rep Log saved!');
+            })
+            .catch(error => {
+                error.response.json().then(errorsData => {
+                    const errors = errorsData.errors;
+                    const firstError = errors[Object.keys(errors)[0]]
+                    this.setState({
+                        newRepLogValidationErrorMessage : firstError
+                    });
+                });
             });
     }
 
@@ -83,12 +94,26 @@ export default class RepLogApp extends Component {
     }
 
     handleDeleteRepLog(id) {
-        deleteRepLog(id);
-        this.setState(prevState => {
+        this.setState((prevState) => {
             return {
-                repLogs: prevState.repLogs.filter(repLog => repLog.id !== id)
+                repLogs: prevState.repLogs.map(repLog => {
+                    if (repLog.id !== id) {
+                        return repLog
+                    }
+                    return Object.assign({}, repLog, { isDeleting: true })
+                })
             }
         })
+
+        deleteRepLog(id)
+            .then(() => {
+                this.setState(prevState => {
+                    return {
+                        repLogs: prevState.repLogs.filter(repLog => repLog.id !== id)
+                    }
+                })
+                this.setSuccessMessage('Item was  Un-lifted!');
+            });
     }
 
     render() {
@@ -100,6 +125,7 @@ export default class RepLogApp extends Component {
             onAddRepLog={ this.handleAddRepLog }
             onHeartChange={ this.handleHeartChange }
             onDeleteRepLog={ this.handleDeleteRepLog }
+
         />
     }
 }

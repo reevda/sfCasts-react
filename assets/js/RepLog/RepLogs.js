@@ -9,7 +9,8 @@ const calculateTotalWeightFancier = repLogs => repLogs.reduce((total, log) => to
 export default function RepLogs(props) {
     let {
         withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog,
-        numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded, isSavingNewRepLog, successMessage
+        numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded, isSavingNewRepLog, successMessage,
+        newRepLogValidationErrorMessage
     } = props
     let heart = ''
     if (withHeart) heart = <span>{ '❤️'.repeat(numberOfHearts) }</span>;
@@ -22,11 +23,11 @@ export default function RepLogs(props) {
             </h2>
             <input type="range" value={ numberOfHearts } onChange={ (e) => onHeartChange(+e.target.value) }/>
 
-            {successMessage && (
+            { successMessage && (
                 <div className="alert alert-success text-center">
-                    {successMessage}
+                    { successMessage }
                 </div>
-            )}
+            ) }
 
             <table className="table table-striped">
                 <thead>
@@ -54,6 +55,7 @@ export default function RepLogs(props) {
                 <div className="col-md-6">
                     <RepLogCreator
                         onAddRepLog={ onAddRepLog }
+                        validationErrorMessage={ newRepLogValidationErrorMessage }
                     />
                 </div>
             </div>
@@ -73,5 +75,6 @@ RepLogs.propTypes = {
     onDeleteRepLog: PropTypes.func.isRequired,
     isLoaded: PropTypes.bool.isRequired,
     isSavingNewRepLog: PropTypes.bool.isRequired,
-    successMessage: PropTypes.string.isRequired
+    successMessage: PropTypes.string.isRequired,
+    newRepLogValidationErrorMessage: PropTypes.string.isRequired
 }
