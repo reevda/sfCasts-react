@@ -10,7 +10,7 @@ export default function RepLogs(props) {
     let {
         withHeart, highlightedRowId, onRowClick, repLogs, onAddRepLog,
         numberOfHearts, onHeartChange, onDeleteRepLog, isLoaded, isSavingNewRepLog, successMessage,
-        newRepLogValidationErrorMessage
+        newRepLogValidationErrorMessage, itemOptions
     } = props
     let heart = ''
     if (withHeart) heart = <span>{ '❤️'.repeat(numberOfHearts) }</span>;
@@ -56,6 +56,7 @@ export default function RepLogs(props) {
                     <RepLogCreator
                         onAddRepLog={ onAddRepLog }
                         validationErrorMessage={ newRepLogValidationErrorMessage }
+                        itemOptions={ itemOptions }
                     />
                 </div>
             </div>
@@ -76,5 +77,6 @@ RepLogs.propTypes = {
     isLoaded: PropTypes.bool.isRequired,
     isSavingNewRepLog: PropTypes.bool.isRequired,
     successMessage: PropTypes.string.isRequired,
-    newRepLogValidationErrorMessage: PropTypes.string.isRequired
+    newRepLogValidationErrorMessage: PropTypes.string.isRequired,
+    itemOptions: PropTypes.array.isRequired
 }
