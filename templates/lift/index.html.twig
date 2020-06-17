@@ -5,7 +5,7 @@
         <div id="lift-stuff-app"></div>
     </div>
     <br><br><br><br><br><br>
-    <hr />
+    <hr/>
 
     <div class="row">
         <div class="col-md-7 js-rep-log-table">
@@ -25,12 +25,12 @@
                 <tbody>
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <th>Total</th>
-                        <th class="js-total-weight"></th>
-                        <td>&nbsp;</td>
-                    </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <th>Total</th>
+                    <th class="js-total-weight"></th>
+                    <td>&nbsp;</td>
+                </tr>
                 </tfoot>
             </table>
 
@@ -56,12 +56,14 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.11.0/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.11.0/dist/sweetalert2.min.css"/>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-
+    <script>
+        window.REP_LOG_APP_PROPS = {{ repLogAppProps|json_encode|raw }}
+    </script>
     <script src="{{ asset('build/rep_log.js') }}"></script>
     <script src="{{ asset('build/rep_log_react.js') }}"></script>
 {% endblock %}

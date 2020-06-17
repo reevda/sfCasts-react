@@ -10,18 +10,31 @@ use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class LiftController extends BaseController
 {
     /**
      * @Route("/lift", name="lift")
      */
-    public function indexAction(Request $request, RepLogRepository $replogRepo, UserRepository $userRepo)
+    public function indexAction(Request $request, RepLogRepository $replogRepo, UserRepository $userRepo, TranslatorInterface $translator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $repLogAppProps = [
+            'withHeart' => true,
+            'itemOptions' => []
+        ];
+        foreach (RepLog::getThingsYouCanLiftChoices() as $label => $id){
+            $repLogAppProps['itemOptions'][] = [
+                'id'=>$id,
+                'text'=>$translator->trans($label)
+            ];
+        }
+
         return $this->render('lift/index.html.twig', array(
             'leaderboard' => $this->getLeaders($replogRepo, $userRepo),
+            'repLogAppProps' => $repLogAppProps,
         ));
     }
 
@@ -44,7 +57,7 @@ class LiftController extends BaseController
             $leaderboard[] = array(
                 'username' => $user->getUsername(),
                 'weight' => $details['weightSum'],
-                'in_cats' => number_format($details['weightSum']/RepLog::WEIGHT_FAT_CAT),
+                'in_cats' => number_format($details['weightSum'] / RepLog::WEIGHT_FAT_CAT),
             );
         }
 

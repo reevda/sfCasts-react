@@ -64,6 +64,7 @@ export default class RepLogApp extends Component {
                         ...newRep,
                         repLogs: newRepLogs,
                         newRepLogValidationErrorMessage: '',
+                        ...newState,
                     };
                 })
                 this.setSuccessMessage('Rep Log saved!');
